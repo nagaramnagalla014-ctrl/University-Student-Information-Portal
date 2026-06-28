@@ -1,0 +1,89 @@
+<div class="content-wrapper">
+    <div class="page-header-row row">
+        <div class="col-md-7"><h2><span class="glyphicon glyphicon-user"></span> Manage Students</h2></div>
+        <div class="col-md-5">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search..." ng-model="searchKeyword" ng-keyup="filter()">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" ng-click="filter()"><span class="glyphicon glyphicon-search"></span></button>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-success" ng-show="success">{{success}}</div>
+    <div class="alert alert-danger"  ng-show="error">{{error}}</div>
+
+    <div class="row">
+        <!-- Student List -->
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead><tr><th>Code</th><th>Name</th><th>Email</th><th>Program</th><th>Dept</th><th>GPA</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            <tr ng-repeat="s in students">
+                                <td>{{s.studentCode}}</td>
+                                <td>{{s.firstName}} {{s.lastName}}</td>
+                                <td><small>{{s.email}}</small></td>
+                                <td>{{s.program}}</td>
+                                <td>{{s.department.deptCode}}</td>
+                                <td><span ng-class="s.gpa >= 7 ? 'text-success' : ''">{{s.gpa}}</span></td>
+                                <td>
+                                    <button class="btn btn-xs btn-danger" ng-click="deleteStudent(s)">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr ng-show="students.length === 0">
+                                <td colspan="7" class="text-center text-muted">No students found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Register Student Form -->
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><h4>Register New Student</h4></div>
+                <div class="panel-body">
+                    <form ng-submit="createStudent()" name="studentForm">
+                        <div class="form-group">
+                            <label>First Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" ng-model="newStudent.firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" ng-model="newStudent.lastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" ng-model="newStudent.email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control" ng-model="newStudent.password" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Program</label>
+                            <select class="form-control" ng-model="newStudent.program">
+                                <option value="B.Tech">B.Tech</option>
+                                <option value="M.Tech">M.Tech</option>
+                                <option value="M.Sc">M.Sc</option>
+                                <option value="Ph.D">Ph.D</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" class="form-control" ng-model="newStudent.phone">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block" ng-disabled="studentForm.$invalid">
+                            <span class="glyphicon glyphicon-plus"></span> Register Student
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

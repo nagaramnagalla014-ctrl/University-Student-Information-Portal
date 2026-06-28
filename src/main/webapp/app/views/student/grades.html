@@ -1,0 +1,80 @@
+<div class="content-wrapper">
+    <div class="page-header-row row">
+        <div class="col-md-8"><h2><span class="glyphicon glyphicon-star"></span> My Grades</h2></div>
+        <div class="col-md-4 text-right">
+            <a href="#/student/transcript" class="btn btn-default">
+                <span class="glyphicon glyphicon-file"></span> View Transcript
+            </a>
+        </div>
+    </div>
+
+    <!-- GPA Card -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-success">
+                <div class="panel-body text-center">
+                    <h1 class="gpa-display">{{gpa || '—'}}</h1>
+                    <p class="text-muted">Current GPA (out of 10)</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4>Grade Summary</h4></div>
+                <div class="panel-body">
+                    <div ng-repeat="e in enrollments" ng-show="e.status === 'ENROLLED'" class="grade-row">
+                        <div class="row" style="margin-bottom:8px;">
+                            <div class="col-xs-5">
+                                <strong>{{e.course.courseCode}}</strong> — {{e.course.courseName}}
+                            </div>
+                            <div class="col-xs-2 text-center">
+                                <span class="label label-lg" ng-class="e.gradePoints >= 7 ? 'label-success' : (e.gradePoints >= 5 ? 'label-warning' : (e.grade ? 'label-danger' : 'label-default'))">
+                                    {{e.grade || 'Pending'}}
+                                </span>
+                            </div>
+                            <div class="col-xs-2 text-center">
+                                <small>{{e.gradePoints != null ? e.gradePoints + ' pts' : '—'}}</small>
+                            </div>
+                            <div class="col-xs-3">
+                                <div class="progress" style="margin:0;height:14px;">
+                                    <div class="progress-bar" ng-class="e.attendancePercentage >= 75 ? 'progress-bar-success' : 'progress-bar-danger'"
+                                         style="width:{{e.attendancePercentage || 0}}%">
+                                        {{e.attendancePercentage || 0}}% att.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-muted text-center" ng-show="enrollments.length === 0">No enrollments found.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grades Table -->
+    <div class="panel panel-default">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead><tr><th>#</th><th>Course Code</th><th>Course Name</th><th>Credits</th><th>Grade</th><th>Grade Points</th><th>Attendance</th><th>Remarks</th></tr></thead>
+                <tbody>
+                    <tr ng-repeat="e in enrollments" ng-show="e.status === 'ENROLLED'">
+                        <td>{{$index + 1}}</td>
+                        <td><strong>{{e.course.courseCode}}</strong></td>
+                        <td>{{e.course.courseName}}</td>
+                        <td>{{e.course.credits}}</td>
+                        <td>
+                            <span class="label" ng-show="e.grade"
+                                  ng-class="e.gradePoints >= 7 ? 'label-success' : (e.gradePoints >= 5 ? 'label-warning' : 'label-danger')">
+                                {{e.grade}}
+                            </span>
+                            <span class="text-muted" ng-hide="e.grade">Not graded</span>
+                        </td>
+                        <td>{{e.gradePoints != null ? e.gradePoints : '—'}}</td>
+                        <td><span ng-class="e.attendancePercentage >= 75 ? 'text-success' : 'text-danger'">{{e.attendancePercentage || 0}}%</span></td>
+                        <td><small class="text-muted">{{e.remarks || '—'}}</small></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,113 @@
+<div class="content-wrapper">
+    <div class="page-header-row row">
+        <div class="col-md-8">
+            <h2><span class="glyphicon glyphicon-home"></span> Student Dashboard
+                <small>Welcome, {{student.firstName}}!</small>
+            </h2>
+        </div>
+        <div class="col-md-4 text-right header-actions">
+            <a href="#/student/courses" class="btn btn-primary">
+                <span class="glyphicon glyphicon-plus"></span> Register Courses
+            </a>
+        </div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="panel panel-primary stat-card">
+                <div class="panel-body text-white text-center">
+                    <div class="stat-icon glyphicon glyphicon-book"></div>
+                    <div class="stat-number">{{stats.total}}</div>
+                    <div class="stat-label">Enrolled Courses</div>
+                </div>
+                <div class="panel-footer"><a href="#/student/courses">View courses &rarr;</a></div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-success stat-card">
+                <div class="panel-body text-white text-center">
+                    <div class="stat-icon glyphicon glyphicon-star"></div>
+                    <div class="stat-number">{{stats.gpa}}</div>
+                    <div class="stat-label">Current GPA</div>
+                </div>
+                <div class="panel-footer"><a href="#/student/grades">View grades &rarr;</a></div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-info stat-card">
+                <div class="panel-body text-white text-center">
+                    <div class="stat-icon glyphicon glyphicon-ok-circle"></div>
+                    <div class="stat-number">{{stats.graded}}</div>
+                    <div class="stat-label">Graded Courses</div>
+                </div>
+                <div class="panel-footer"><a href="#/student/grades">View details &rarr;</a></div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-warning stat-card">
+                <div class="panel-body text-white text-center">
+                    <div class="stat-icon glyphicon glyphicon-time"></div>
+                    <div class="stat-number">{{stats.avgAttendance}}%</div>
+                    <div class="stat-label">Avg Attendance</div>
+                </div>
+                <div class="panel-footer"><a href="#/student/grades">View all &rarr;</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Current Enrollments -->
+        <div class="col-md-7">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4><span class="glyphicon glyphicon-book"></span> My Current Courses</h4></div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead><tr><th>Course</th><th>Credits</th><th>Faculty</th><th>Grade</th><th>Attendance</th></tr></thead>
+                        <tbody>
+                            <tr ng-repeat="e in enrollments" ng-show="e.status === 'ENROLLED'">
+                                <td>
+                                    <strong>{{e.course.courseCode}}</strong><br>
+                                    <small>{{e.course.courseName}}</small>
+                                </td>
+                                <td><span class="badge">{{e.course.credits}}</span></td>
+                                <td>{{e.course.faculty.firstName}} {{e.course.faculty.lastName}}</td>
+                                <td>
+                                    <span ng-show="e.grade" class="label" ng-class="e.gradePoints >= 7 ? 'label-success' : (e.gradePoints >= 5 ? 'label-warning' : 'label-danger')">{{e.grade}}</span>
+                                    <span ng-hide="e.grade" class="text-muted">Pending</span>
+                                </td>
+                                <td>
+                                    <div class="progress" style="margin:0;height:14px;">
+                                        <div class="progress-bar" ng-class="e.attendancePercentage >= 75 ? 'progress-bar-success' : 'progress-bar-danger'"
+                                             style="width:{{e.attendancePercentage || 0}}%">
+                                            {{e.attendancePercentage || 0}}%
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr ng-show="enrollments.length === 0">
+                                <td colspan="5" class="text-center text-muted">No courses enrolled. <a href="#/student/courses">Register now</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Notifications -->
+        <div class="col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4><span class="glyphicon glyphicon-bell"></span> Recent Notifications</h4></div>
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="n in notifications" ng-class="{'list-group-item-info': !n.isRead}">
+                        <small class="text-muted pull-right">{{n.createdAt | date:'dd MMM'}}</small>
+                        <strong>{{n.title}}</strong><br>
+                        <small>{{n.message}}</small>
+                    </li>
+                    <li class="list-group-item text-muted text-center" ng-show="!notifications || notifications.length === 0">
+                        No notifications
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

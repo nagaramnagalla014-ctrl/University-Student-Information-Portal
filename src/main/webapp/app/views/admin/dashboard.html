@@ -1,0 +1,71 @@
+<div class="content-wrapper">
+    <h2><span class="glyphicon glyphicon-dashboard"></span> Admin Dashboard</h2>
+
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="panel panel-primary stat-card">
+                <div class="panel-body text-white text-center">
+                    <div class="stat-icon glyphicon glyphicon-user"></div>
+                    <div class="stat-number">{{stats.totalStudents}}</div>
+                    <div class="stat-label">Students</div>
+                </div>
+                <div class="panel-footer"><a href="#/admin/students">Manage &rarr;</a></div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-success stat-card">
+                <div class="panel-body text-white text-center">
+                    <div class="stat-icon glyphicon glyphicon-education"></div>
+                    <div class="stat-number">{{stats.totalFaculty}}</div>
+                    <div class="stat-label">Faculty</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-info stat-card">
+                <div class="panel-body text-white text-center">
+                    <div class="stat-icon glyphicon glyphicon-book"></div>
+                    <div class="stat-number">{{stats.totalCourses}}</div>
+                    <div class="stat-label">Courses</div>
+                </div>
+                <div class="panel-footer"><a href="#/admin/courses">Manage &rarr;</a></div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-warning stat-card">
+                <div class="panel-body text-white text-center">
+                    <div class="stat-icon glyphicon glyphicon-th-large"></div>
+                    <div class="stat-number">{{stats.departments}}</div>
+                    <div class="stat-label">Departments</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Semester -->
+    <div class="alert alert-info" ng-show="stats.activeSemester">
+        <span class="glyphicon glyphicon-calendar"></span>
+        <strong>Active Semester:</strong> {{stats.activeSemester.semName}}
+        ({{stats.activeSemester.startDate | date:'dd MMM yyyy'}} – {{stats.activeSemester.endDate | date:'dd MMM yyyy'}})
+    </div>
+
+    <!-- Recent Students -->
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>Recent Students</h4></div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead><tr><th>Code</th><th>Name</th><th>Program</th><th>Department</th><th>GPA</th></tr></thead>
+                <tbody>
+                    <tr ng-repeat="s in recentStudents">
+                        <td>{{s.studentCode}}</td>
+                        <td>{{s.firstName}} {{s.lastName}}</td>
+                        <td>{{s.program}}</td>
+                        <td>{{s.department.deptCode}}</td>
+                        <td>{{s.gpa}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="panel-footer"><a href="#/admin/students">View all students &rarr;</a></div>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+<div class="content-wrapper">
+    <div class="page-header-row row no-print">
+        <div class="col-md-8"><h2><span class="glyphicon glyphicon-file"></span> Academic Transcript</h2></div>
+        <div class="col-md-4 text-right">
+            <button class="btn btn-default" ng-click="print()">
+                <span class="glyphicon glyphicon-print"></span> Print Transcript
+            </button>
+        </div>
+    </div>
+
+    <div class="panel panel-default transcript-panel">
+        <!-- Header -->
+        <div class="panel-body">
+            <div class="text-center transcript-header">
+                <h3>&#127979; STATE UNIVERSITY OF TECHNOLOGY</h3>
+                <h4>OFFICIAL ACADEMIC TRANSCRIPT</h4>
+                <hr>
+            </div>
+
+            <!-- Student Info -->
+            <div class="row transcript-info">
+                <div class="col-md-6">
+                    <table class="table table-bordered detail-table">
+                        <tr><th>Student Name</th><td>{{student.firstName}} {{student.lastName}}</td></tr>
+                        <tr><th>Student Code</th><td>{{student.studentCode}}</td></tr>
+                        <tr><th>Program</th><td>{{student.program}}</td></tr>
+                        <tr><th>Department</th><td>{{student.department.deptName}}</td></tr>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <table class="table table-bordered detail-table">
+                        <tr><th>Email</th><td>{{student.email}}</td></tr>
+                        <tr><th>Admission Date</th><td>{{student.admissionDate | date:'dd MMM yyyy'}}</td></tr>
+                        <tr><th>Total Credits</th><td>{{totalCredits}}</td></tr>
+                        <tr><th>CGPA</th><td><strong>{{cgpa}}</strong></td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Grades Table -->
+            <h5><strong>Course-wise Academic Record</strong></h5>
+            <table class="table table-bordered transcript-table">
+                <thead>
+                    <tr class="transcript-header-row">
+                        <th>#</th><th>Course Code</th><th>Course Name</th><th>Semester</th><th>Credits</th><th>Grade</th><th>Grade Points</th><th>Attendance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="e in enrollments" ng-show="e.status === 'ENROLLED'">
+                        <td>{{$index + 1}}</td>
+                        <td><strong>{{e.course.courseCode}}</strong></td>
+                        <td>{{e.course.courseName}}</td>
+                        <td>{{e.course.semester.semName}}</td>
+                        <td>{{e.course.credits}}</td>
+                        <td><span ng-show="e.grade" class="label" ng-class="e.gradePoints >= 7 ? 'label-success' : 'label-warning'">{{e.grade}}</span><span ng-hide="e.grade" class="text-muted">—</span></td>
+                        <td>{{e.gradePoints != null ? e.gradePoints : '—'}}</td>
+                        <td>{{e.attendancePercentage || 0}}%</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4"><strong>Summary</strong></td>
+                        <td><strong>{{totalCredits}} Credits</strong></td>
+                        <td colspan="2"><strong>CGPA: {{cgpa}}</strong></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="transcript-footer text-center">
+                <p><em>This is an official academic transcript issued by the Registrar's Office.</em></p>
+            </div>
+        </div>
+    </div>
+</div>

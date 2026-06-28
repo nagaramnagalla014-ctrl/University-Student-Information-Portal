@@ -1,0 +1,61 @@
+<div class="content-wrapper">
+    <h2><span class="glyphicon glyphicon-pencil"></span> Upload Grades</h2>
+
+    <div class="alert alert-success" ng-show="success"><span class="glyphicon glyphicon-ok"></span> {{success}}</div>
+    <div class="alert alert-danger"  ng-show="error"><span class="glyphicon glyphicon-exclamation-sign"></span> {{error}}</div>
+
+    <!-- Select Course -->
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>Step 1: Select Course</h4></div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <select class="form-control" ng-model="selectedCourse" ng-options="c.courseCode + ' - ' + c.courseName for c in courses" ng-change="selectCourse(selectedCourse)">
+                        <option value="">-- Select a course --</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Students List with Grade Entry -->
+    <div class="panel panel-default" ng-show="selectedCourse">
+        <div class="panel-heading">
+            <h4>Step 2: Enter Grades — <strong>{{selectedCourse.courseName}}</strong>
+                <small>({{enrollments.length}} students)</small>
+            </h4>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead><tr><th>#</th><th>Student</th><th>Code</th><th>Current Grade</th><th>New Grade</th><th>Points</th><th>Remarks</th><th>Action</th></tr></thead>
+                <tbody>
+                    <tr ng-repeat="e in enrollments">
+                        <td>{{$index + 1}}</td>
+                        <td>{{e.student.firstName}} {{e.student.lastName}}</td>
+                        <td>{{e.student.studentCode}}</td>
+                        <td>
+                            <span ng-show="e.grade" class="label label-info">{{e.grade}}</span>
+                            <span ng-hide="e.grade" class="text-muted">Not graded</span>
+                        </td>
+                        <td>
+                            <select class="form-control input-sm" ng-model="e.grade" style="width:80px;">
+                                <option value="">—</option>
+                                <option ng-repeat="g in grades" value="{{g}}">{{g}}</option>
+                            </select>
+                        </td>
+                        <td><span class="text-muted">{{gradePoints[e.grade] || 0}}</span></td>
+                        <td><input type="text" class="form-control input-sm" ng-model="e.remarks" placeholder="Optional"></td>
+                        <td>
+                            <button class="btn btn-sm btn-success" ng-click="updateGrade(e)" ng-disabled="!e.grade">
+                                <span class="glyphicon glyphicon-ok"></span> Save
+                            </button>
+                        </td>
+                    </tr>
+                    <tr ng-show="enrollments.length === 0">
+                        <td colspan="8" class="text-center text-muted">No students enrolled in this course.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

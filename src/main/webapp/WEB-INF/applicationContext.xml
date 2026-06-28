@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- Scan DAOs and Services -->
+    <context:component-scan base-package="com.university.portal.dao, com.university.portal.service"/>
+
+    <!-- ================================================================
+         Oracle DataSource with C3P0 connection pool
+         ================================================================ -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+          destroy-method="close">
+        <property name="driverClass"  value="oracle.jdbc.OracleDriver"/>
+        <property name="jdbcUrl"      value="jdbc:oracle:thin:@localhost:1521:XE"/>
+        <property name="user"         value="portal_user"/>
+        <property name="password"     value="portal123"/>
+        <!-- Pool settings -->
+        <property name="minPoolSize"          value="5"/>
+        <property name="maxPoolSize"          value="20"/>
+        <property name="acquireIncrement"     value="5"/>
+        <property name="maxIdleTime"          value="3600"/>
+        <property name="idleConnectionTestPeriod" value="600"/>
+    </bean>
+
+    <!-- ================================================================
+         Hibernate SessionFactory
+         ================================================================ -->
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.university.portal.model"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">false</prop>
+                <prop key="hibernate.hbm2ddl.auto">validate</prop>
+                <prop key="hibernate.c3p0.min_size">5</prop>
+                <prop key="hibernate.c3p0.max_size">20</prop>
+                <prop key="hibernate.c3p0.timeout">3600</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- ================================================================
+         Transaction Manager
+         ================================================================ -->
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <!-- Enable @Transactional annotations -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+</beans>

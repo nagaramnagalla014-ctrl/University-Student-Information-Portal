@@ -1,0 +1,84 @@
+<div class="content-wrapper">
+    <div class="page-header-row row">
+        <div class="col-md-8">
+            <h2><span class="glyphicon glyphicon-home"></span> Faculty Dashboard
+                <small>Welcome, {{faculty.firstName}}!</small>
+            </h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel panel-primary stat-card">
+                <div class="panel-body text-white text-center">
+                    <div class="stat-icon glyphicon glyphicon-book"></div>
+                    <div class="stat-number">{{courses.length}}</div>
+                    <div class="stat-label">Assigned Courses</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-success stat-card">
+                <div class="panel-body text-white text-center">
+                    <div class="stat-icon glyphicon glyphicon-pencil"></div>
+                    <div class="stat-number">—</div>
+                    <div class="stat-label">Grades Uploaded</div>
+                </div>
+                <div class="panel-footer"><a href="#/faculty/grades">Upload grades &rarr;</a></div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-warning stat-card">
+                <div class="panel-body text-white text-center">
+                    <div class="stat-icon glyphicon glyphicon-calendar"></div>
+                    <div class="stat-number">—</div>
+                    <div class="stat-label">Attendance Pending</div>
+                </div>
+                <div class="panel-footer"><a href="#/faculty/attendance">Update attendance &rarr;</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- My Courses -->
+        <div class="col-md-7">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4><span class="glyphicon glyphicon-book"></span> My Courses</h4></div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead><tr><th>Code</th><th>Course Name</th><th>Credits</th><th>Department</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            <tr ng-repeat="c in courses">
+                                <td><strong>{{c.courseCode}}</strong></td>
+                                <td>{{c.courseName}}</td>
+                                <td>{{c.credits}}</td>
+                                <td>{{c.department.deptCode}}</td>
+                                <td>
+                                    <a href="#/faculty/grades" class="btn btn-xs btn-success">Grades</a>
+                                    <a href="#/faculty/attendance" class="btn btn-xs btn-primary">Attendance</a>
+                                </td>
+                            </tr>
+                            <tr ng-show="courses.length === 0">
+                                <td colspan="5" class="text-center text-muted">No courses assigned.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Notifications -->
+        <div class="col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4><span class="glyphicon glyphicon-bell"></span> Notifications</h4></div>
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="n in notifications" ng-class="{'list-group-item-info': !n.isRead}">
+                        <small class="text-muted pull-right">{{n.createdAt | date:'dd MMM'}}</small>
+                        <strong>{{n.title}}</strong><br>
+                        <small>{{n.message}}</small>
+                    </li>
+                    <li class="list-group-item text-center text-muted" ng-show="notifications.length === 0">No notifications</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

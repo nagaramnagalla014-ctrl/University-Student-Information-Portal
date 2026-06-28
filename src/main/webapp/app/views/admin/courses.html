@@ -1,0 +1,91 @@
+<div class="content-wrapper">
+    <h2><span class="glyphicon glyphicon-book"></span> Manage Courses</h2>
+
+    <div class="alert alert-success" ng-show="success">{{success}}</div>
+    <div class="alert alert-danger"  ng-show="error">{{error}}</div>
+
+    <div class="row">
+        <!-- Courses Table -->
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead><tr><th>Code</th><th>Course</th><th>Credits</th><th>Faculty</th><th>Dept</th><th>Semester</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            <tr ng-repeat="c in courses" ng-show="c.isActive">
+                                <td><strong>{{c.courseCode}}</strong></td>
+                                <td>{{c.courseName}}<br><small class="text-muted">{{c.description}}</small></td>
+                                <td>{{c.credits}}</td>
+                                <td>{{c.faculty.firstName}} {{c.faculty.lastName}}</td>
+                                <td>{{c.department.deptCode}}</td>
+                                <td>{{c.semester.semName}}</td>
+                                <td>
+                                    <button class="btn btn-xs btn-danger" ng-click="deleteCourse(c)">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr ng-show="courses.length === 0">
+                                <td colspan="7" class="text-center text-muted">No courses found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Create Course Form -->
+        <div class="col-md-4">
+            <div class="panel panel-success">
+                <div class="panel-heading"><h4>Add New Course</h4></div>
+                <div class="panel-body">
+                    <form ng-submit="createCourse()" name="courseForm">
+                        <div class="form-group">
+                            <label>Course Code <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" ng-model="newCourse.courseCode" required placeholder="e.g. CSE301">
+                        </div>
+                        <div class="form-group">
+                            <label>Course Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" ng-model="newCourse.courseName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Credits</label>
+                            <input type="number" class="form-control" ng-model="newCourse.credits" min="1" max="6">
+                        </div>
+                        <div class="form-group">
+                            <label>Department</label>
+                            <select class="form-control" ng-model="newCourse.deptId">
+                                <option value="">-- Select --</option>
+                                <option ng-repeat="d in departments" value="{{d.deptId}}">{{d.deptCode}} - {{d.deptName}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Assigned Faculty</label>
+                            <select class="form-control" ng-model="newCourse.facultyId">
+                                <option value="">-- Select --</option>
+                                <option ng-repeat="f in faculty" value="{{f.facultyId}}">{{f.firstName}} {{f.lastName}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Semester</label>
+                            <select class="form-control" ng-model="newCourse.semId">
+                                <option value="">-- Select --</option>
+                                <option ng-repeat="s in semesters" value="{{s.semId}}">{{s.semName}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Max Students</label>
+                            <input type="number" class="form-control" ng-model="newCourse.maxStudents">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-control" ng-model="newCourse.description" rows="2"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block" ng-disabled="courseForm.$invalid">
+                            <span class="glyphicon glyphicon-plus"></span> Add Course
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
