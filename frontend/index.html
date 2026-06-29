@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UniPortal — University Student Information Portal</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{--bg:#080c14;--bg-alt:#0d1424;--card:rgba(255,255,255,0.035);--border:rgba(255,255,255,0.07);--text:#e2e8f0;--muted:#64748b;--blue:#4f8ef7;--purple:#8b5cf6;--cyan:#06d6c0;--green:#22d3a5;--red:#f43f5e;--yellow:#f59e0b}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;min-height:100vh}
+.demo-banner{background:rgba(245,158,11,0.15);border-bottom:1px solid rgba(245,158,11,0.3);color:#f59e0b;text-align:center;padding:8px 16px;font-size:13px;font-weight:500}
+.navbar{display:flex;align-items:center;gap:24px;padding:0 24px;height:60px;background:rgba(13,20,36,0.95);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.nav-brand{font-size:18px;font-weight:700;background:linear-gradient(135deg,#8b5cf6,#4f8ef7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-links{display:flex;gap:4px}
+.nav-link{padding:6px 14px;border-radius:6px;color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s}
+.nav-link:hover,.nav-link.active{background:rgba(139,92,246,0.12);color:var(--purple)}
+.main{padding:24px;max-width:1400px;margin:0 auto}
+.tab{display:none}.tab.active{display:block}
+.page-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.page-header h1{font-size:22px;font-weight:700}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;display:flex;align-items:center;gap:14px}
+.stat-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.si-blue{background:rgba(79,142,247,0.15);color:var(--blue)}.si-green{background:rgba(34,211,165,0.15);color:var(--green)}.si-purple{background:rgba(139,92,246,0.15);color:var(--purple)}.si-cyan{background:rgba(6,214,192,0.15);color:var(--cyan)}
+.stat-value{font-size:26px;font-weight:700;line-height:1}.stat-label{font-size:12px;color:var(--muted);margin-top:2px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-header h2{font-size:15px;font-weight:600}
+table{width:100%;border-collapse:collapse}
+th{padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)}
+td{padding:12px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.04)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,0.02)}
+.badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.b-green{background:rgba(34,211,165,0.15);color:var(--green);border:1px solid rgba(34,211,165,0.3)}
+.b-blue{background:rgba(79,142,247,0.15);color:var(--blue);border:1px solid rgba(79,142,247,0.3)}
+.b-yellow{background:rgba(245,158,11,0.15);color:var(--yellow);border:1px solid rgba(245,158,11,0.3)}
+.b-red{background:rgba(244,63,94,0.15);color:var(--red);border:1px solid rgba(244,63,94,0.3)}
+.b-purple{background:rgba(139,92,246,0.15);color:var(--purple);border:1px solid rgba(139,92,246,0.3)}
+.section-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
+.grade-A{color:var(--green);font-weight:700}.grade-B{color:var(--blue);font-weight:700}.grade-C{color:var(--yellow);font-weight:700}.grade-F{color:var(--red);font-weight:700}
+.progress-bar{height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;margin-top:4px}
+.progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--purple),var(--blue))}
+@media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)}.section-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="demo-banner"><i class="fas fa-flask"></i> UI Demo — backend requires local setup (Java 8 · Spring MVC · Hibernate · Oracle · AngularJS)</div>
+<nav class="navbar">
+  <div class="nav-brand"><i class="fas fa-graduation-cap"></i> UniPortal</div>
+  <div class="nav-links">
+    <a class="nav-link active" onclick="showTab('dashboard',this)">Dashboard</a>
+    <a class="nav-link" onclick="showTab('courses',this)">Courses</a>
+    <a class="nav-link" onclick="showTab('grades',this)">Grades</a>
+    <a class="nav-link" onclick="showTab('attendance',this)">Attendance</a>
+  </div>
+</nav>
+<main class="main">
+  <div id="tab-dashboard" class="tab active">
+    <div class="page-header"><h1>Student Dashboard</h1><span style="font-size:13px;color:var(--muted)">Welcome, Nagaram Nagalla — Student ID: STU-2024-0142</span></div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon si-blue"><i class="fas fa-book-open"></i></div><div><div class="stat-value">6</div><div class="stat-label">Enrolled Courses</div></div></div>
+      <div class="stat-card"><div class="stat-icon si-green"><i class="fas fa-chart-line"></i></div><div><div class="stat-value">8.4</div><div class="stat-label">Current CGPA</div></div></div>
+      <div class="stat-card"><div class="stat-icon si-purple"><i class="fas fa-calendar-check"></i></div><div><div class="stat-value">87%</div><div class="stat-label">Attendance</div></div></div>
+      <div class="stat-card"><div class="stat-icon si-cyan"><i class="fas fa-bell"></i></div><div><div class="stat-value">3</div><div class="stat-label">Notifications</div></div></div>
+    </div>
+    <div class="section-grid">
+      <div class="card">
+        <div class="card-header"><h2>Current Semester — Fall 2024</h2></div>
+        <table><thead><tr><th>Course</th><th>Credits</th><th>Faculty</th><th>Mid-Term</th><th>Grade</th></tr></thead>
+        <tbody>
+          <tr><td>Advanced Java Programming</td><td>4</td><td>Prof. Sharma</td><td>88/100</td><td class="grade-A">A</td></tr>
+          <tr><td>Distributed Systems</td><td>3</td><td>Prof. Mehta</td><td>82/100</td><td class="grade-A">A-</td></tr>
+          <tr><td>Cloud Computing</td><td>3</td><td>Prof. Gupta</td><td>79/100</td><td class="grade-B">B+</td></tr>
+          <tr><td>Software Architecture</td><td>3</td><td>Prof. Iyer</td><td>91/100</td><td class="grade-A">A+</td></tr>
+          <tr><td>Database Management</td><td>3</td><td>Prof. Rao</td><td>74/100</td><td class="grade-B">B</td></tr>
+          <tr><td>Research Methods</td><td>2</td><td>Prof. Singh</td><td>85/100</td><td class="grade-A">A</td></tr>
+        </tbody></table>
+      </div>
+      <div class="card">
+        <div class="card-header"><h2>Notifications</h2></div>
+        <div style="padding:0">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--border)"><div style="font-size:13px;font-weight:500">Assignment Due: Distributed Systems</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Submit by Jan 22, 2024 · <span style="color:var(--red)">2 days left</span></div></div>
+          <div style="padding:14px 20px;border-bottom:1px solid var(--border)"><div style="font-size:13px;font-weight:500">Mid-Semester Results Published</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Cloud Computing grades are now available</div></div>
+          <div style="padding:14px 20px"><div style="font-size:13px;font-weight:500">Library Book Due</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Return "Clean Architecture" by Jan 25, 2024</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="tab-courses" class="tab">
+    <div class="page-header"><h1>Course Registration</h1></div>
+    <div class="card">
+      <div class="card-header"><h2>Available Courses — Spring 2024</h2></div>
+      <table><thead><tr><th>Code</th><th>Course Name</th><th>Department</th><th>Credits</th><th>Faculty</th><th>Seats Left</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>CS601</td><td>Machine Learning</td><td>Computer Science</td><td>3</td><td>Prof. Sharma</td><td>12</td><td><span class="badge b-blue">Enroll</span></td></tr>
+        <tr><td>CS602</td><td>DevOps Engineering</td><td>Computer Science</td><td>3</td><td>Prof. Mehta</td><td>8</td><td><span class="badge b-blue">Enroll</span></td></tr>
+        <tr><td>CS603</td><td>Microservices Architecture</td><td>Computer Science</td><td>3</td><td>Prof. Gupta</td><td>15</td><td><span class="badge b-blue">Enroll</span></td></tr>
+        <tr><td>CS604</td><td>Big Data Analytics</td><td>Computer Science</td><td>4</td><td>Prof. Iyer</td><td>0</td><td><span class="badge b-red">Full</span></td></tr>
+        <tr><td>CS605</td><td>Cybersecurity Fundamentals</td><td>Computer Science</td><td>3</td><td>Prof. Rao</td><td>5</td><td><span class="badge b-blue">Enroll</span></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+  <div id="tab-grades" class="tab">
+    <div class="page-header"><h1>Grade Report</h1></div>
+    <div class="card">
+      <div class="card-header"><h2>Academic Transcript</h2><span style="font-size:13px;color:var(--green);font-weight:600">CGPA: 8.4 / 10.0</span></div>
+      <table><thead><tr><th>Semester</th><th>Course</th><th>Credits</th><th>Grade</th><th>Points</th></tr></thead>
+      <tbody>
+        <tr><td>Fall 2023</td><td>Object-Oriented Design</td><td>3</td><td class="grade-A">A</td><td>9.0</td></tr>
+        <tr><td>Fall 2023</td><td>Operating Systems</td><td>3</td><td class="grade-B">B+</td><td>8.0</td></tr>
+        <tr><td>Fall 2023</td><td>Computer Networks</td><td>3</td><td class="grade-A">A-</td><td>8.7</td></tr>
+        <tr><td>Spring 2023</td><td>Data Structures</td><td>4</td><td class="grade-A">A+</td><td>10.0</td></tr>
+        <tr><td>Spring 2023</td><td>Algorithms</td><td>3</td><td class="grade-A">A</td><td>9.0</td></tr>
+        <tr><td>Spring 2023</td><td>Web Technologies</td><td>3</td><td class="grade-B">B</td><td>7.5</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+  <div id="tab-attendance" class="tab">
+    <div class="page-header"><h1>Attendance Record</h1></div>
+    <div class="card">
+      <table><thead><tr><th>Course</th><th>Total Classes</th><th>Attended</th><th>Attendance %</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Advanced Java Programming</td><td>42</td><td>40</td><td><div>95%<div class="progress-bar"><div class="progress-fill" style="width:95%"></div></div></div></td><td><span class="badge b-green">Good</span></td></tr>
+        <tr><td>Distributed Systems</td><td>38</td><td>34</td><td><div>89%<div class="progress-bar"><div class="progress-fill" style="width:89%"></div></div></div></td><td><span class="badge b-green">Good</span></td></tr>
+        <tr><td>Cloud Computing</td><td>35</td><td>28</td><td><div>80%<div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div></div></td><td><span class="badge b-yellow">Average</span></td></tr>
+        <tr><td>Software Architecture</td><td>40</td><td>38</td><td><div>95%<div class="progress-bar"><div class="progress-fill" style="width:95%"></div></div></div></td><td><span class="badge b-green">Good</span></td></tr>
+        <tr><td>Database Management</td><td>36</td><td>27</td><td><div>75%<div class="progress-bar"><div class="progress-fill" style="width:75%;background:linear-gradient(90deg,var(--yellow),var(--red))"></div></div></div></td><td><span class="badge b-yellow">Low</span></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</main>
+<script>
+function showTab(tab,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
